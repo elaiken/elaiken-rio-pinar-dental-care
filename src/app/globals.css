@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+:root {
+  --background: #060b12;
+  --foreground: #f5f7fb;
+  --accent-1: #b8f3ff;
+  --accent-2: #f7e7b7;
+  --accent-3: #8ab4f8;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-manrope);
+  --font-display: var(--font-playfair);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: radial-gradient(circle at top, #0f1a2e 0%, #060b12 45%, #02040a 100%);
+  color: var(--foreground);
+  font-family: var(--font-manrope), sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-playfair), serif;
+}
+
+.glass {
+  backdrop-filter: blur(16px);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+}
+
+.aurora {
+  background-image: radial-gradient(circle at top left, rgba(184, 243, 255, 0.25), transparent 45%),
+    radial-gradient(circle at top right, rgba(247, 231, 183, 0.2), transparent 40%),
+    radial-gradient(circle at 30% 80%, rgba(138, 180, 248, 0.25), transparent 45%);
+}
