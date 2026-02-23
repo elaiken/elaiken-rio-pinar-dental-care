@@ -1,357 +1,355 @@
 import Link from "next/link";
+import { DoctorPortrait } from "@/components/doctor-portrait";
 import { LeadForm } from "@/components/lead-form";
-import { Reveal } from "@/components/reveal";
-import { FaqAI } from "@/components/faq-ai";
+import { RioPinarLogo } from "@/components/rio-pinar-logo";
 import { siteConfig } from "@/lib/site";
 
+const quickLinks = [
+  {
+    title: "Request Appointment",
+    href: "/appointments",
+    body: "Send your preferred day and the office will confirm availability.",
+  },
+  {
+    title: "Insurance & Payments",
+    href: "/insurance",
+    body: "View accepted insurance information and payment options.",
+  },
+  {
+    title: "Patient Forms",
+    href: "/intake",
+    body: "Complete intake and new patient information before your visit.",
+  },
+];
+
 export default function Home() {
+  const openingHours = siteConfig.hours
+    .filter((item) => item.hours !== "Closed")
+    .map((item) => {
+      const [opens, closes] = item.hours.split(" - ");
+      return {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: item.day,
+        opens,
+        closes,
+      };
+    });
+
   return (
-    <main className="aurora">
-      <section className="relative overflow-hidden px-5 pb-20 pt-16 md:px-8 md:pb-28">
-        <div className="mx-auto grid w-full max-w-6xl gap-12 md:grid-cols-[1.1fr_0.9fr]">
+    <main className="bg-[#f7fafc] text-slate-900">
+      <section className="border-b border-slate-200 bg-gradient-to-b from-[#eaf7f6] to-white">
+        <div className="mx-auto grid w-full max-w-6xl gap-10 px-5 py-12 md:grid-cols-[1.05fr_0.95fr] md:px-8 md:py-16">
           <div className="space-y-6">
-            <Reveal>
-              <p className="text-xs uppercase tracking-[0.3em] text-white/60">
-                Central Florida · 2027 Dentistry
-              </p>
-            </Reveal>
-            <Reveal delay={0.05}>
-              <h1 className="text-4xl font-semibold leading-tight md:text-6xl">
-                Luxury dentistry engineered for the next decade.
+            <div className="inline-flex items-center rounded-full border border-teal-200 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-teal-700">
+              Orlando Family Dentistry
+            </div>
+            <div className="space-y-4">
+              <h1 className="font-display text-4xl font-semibold leading-tight text-slate-900 md:text-6xl">
+                Friendly, modern dental care for the Rio Pinar community.
               </h1>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <p className="text-lg text-white/70">
-                {siteConfig.name} combines advanced digital diagnostics, a
-                spa-level experience, and transparent care plans. Every visit is
-                designed for calm, clarity, and precision.
+              <p className="max-w-xl text-base leading-7 text-slate-600">
+                {siteConfig.name} offers comprehensive dental care in Orlando
+                with online appointment requests, clear treatment planning, and
+                a patient-first experience for families and individuals.
               </p>
-            </Reveal>
-            <Reveal delay={0.15}>
-              <div className="flex flex-wrap gap-3">
-                <Link
-                  href="/appointments"
-                  className="rounded-full bg-gradient-to-r from-cyan-200 via-white to-amber-200 px-6 py-3 text-xs font-semibold uppercase tracking-widest text-black"
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <Link
+                href="/appointments"
+                className="rounded-full bg-teal-700 px-6 py-3 text-sm font-semibold text-white transition hover:bg-teal-800"
+              >
+                Request Appointment
+              </Link>
+              <a
+                href={`tel:${siteConfig.phoneRaw}`}
+                className="rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-800 transition hover:border-teal-500 hover:text-teal-700"
+              >
+                Call {siteConfig.phone}
+              </a>
+            </div>
+            <div className="grid gap-3 pt-2 text-sm text-slate-600 sm:grid-cols-2">
+              <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                  Address
+                </p>
+                <p className="mt-2">{siteConfig.addressLine}</p>
+                <a
+                  href={siteConfig.mapLink}
+                  className="mt-3 inline-flex text-sm font-semibold text-teal-700"
                 >
-                  Book Appointment
-                </Link>
-                <Link
-                  href="/emergency"
-                  className="rounded-full border border-white/20 px-6 py-3 text-xs font-semibold uppercase tracking-widest text-white"
-                >
-                  Emergency Dental
-                </Link>
+                  Get Directions →
+                </a>
               </div>
-            </Reveal>
-            <Reveal delay={0.2}>
-              <div className="flex flex-wrap gap-4 text-xs uppercase tracking-widest text-white/50">
-                <span>Digital Scans</span>
-                <span>Luxury Suites</span>
-                <span>Concierge Care</span>
-                <span>Same-Day Options</span>
+              <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                  Appointment Requests
+                </p>
+                <p className="mt-2">
+                  Submitted online and reviewed by the office before
+                  confirmation.
+                </p>
+                <p className="mt-2 text-xs text-slate-500">
+                  Notifications can be routed to {siteConfig.email}
+                </p>
               </div>
-            </Reveal>
+            </div>
           </div>
-          <Reveal delay={0.2}>
-            <div className="glass rounded-[28px] border border-white/10 p-6 shadow-2xl">
-              <p className="text-xs uppercase tracking-widest text-white/60">
-                Request a visit
+
+          <div className="space-y-6">
+            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-teal-700">
+                Schedule Request
               </p>
-              <h2 className="mt-2 text-2xl font-semibold">
-                We will confirm in under 24 hours.
+              <h2 className="mt-3 text-2xl font-semibold text-slate-900">
+                Request an appointment online
               </h2>
-              <div className="mt-6">
+              <p className="mt-2 text-sm text-slate-600">
+                Fill out the form and the office will contact you to confirm
+                the appointment time.
+              </p>
+              <div className="mt-5">
                 <LeadForm />
               </div>
             </div>
-          </Reveal>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                  New Patient Focus
+                </p>
+                <p className="mt-2 text-sm text-slate-600">
+                  Demo section modeled after the reference site. We can add
+                  your finalized first-visit process and paperwork details.
+                </p>
+              </div>
+              <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                  Emergency Support
+                </p>
+                <p className="mt-2 text-sm text-slate-600">
+                  Call the office for urgent dental concerns and same-day
+                  availability when possible.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="absolute -top-24 right-0 h-72 w-72 rounded-full bg-cyan-200/10 blur-3xl" />
-        <div className="absolute bottom-0 left-0 h-60 w-60 rounded-full bg-amber-200/10 blur-3xl" />
       </section>
 
-      <section className="px-5 pb-20 md:px-8">
-        <div className="mx-auto grid w-full max-w-6xl gap-8 md:grid-cols-3">
-          {[
-            {
-              title: "Immersive diagnostics",
-              body: "3D scans and AI-assisted imaging to plan every procedure with precision.",
-            },
-            {
-              title: "Luxury patient flow",
-              body: "Private suites, calming lighting, and concierge-style check-ins.",
-            },
-            {
-              title: "Transparent care",
-              body: "Clear financial options, insurance estimates, and digital treatment plans.",
-            },
-          ].map((item, index) => (
-            <Reveal key={item.title} delay={index * 0.05}>
-              <div className="glass rounded-3xl border border-white/10 p-6">
-                <h3 className="text-xl font-semibold">{item.title}</h3>
-                <p className="mt-3 text-sm text-white/70">{item.body}</p>
-              </div>
-            </Reveal>
+      <section className="border-b border-slate-200 bg-white">
+        <div className="mx-auto grid w-full max-w-6xl gap-6 px-5 py-10 md:grid-cols-3 md:px-8">
+          {quickLinks.map((item) => (
+            <Link
+              key={item.title}
+              href={item.href}
+              className="rounded-2xl border border-slate-200 bg-slate-50 p-5 transition hover:border-teal-300 hover:bg-white"
+            >
+              <h2 className="text-lg font-semibold text-slate-900">
+                {item.title}
+              </h2>
+              <p className="mt-2 text-sm leading-6 text-slate-600">{item.body}</p>
+            </Link>
           ))}
         </div>
       </section>
 
-      <section className="px-5 pb-24 md:px-8">
-        <div className="mx-auto grid w-full max-w-6xl items-center gap-10 md:grid-cols-[1.1fr_0.9fr]">
-          <Reveal>
-            <div className="space-y-4">
-              <p className="text-xs uppercase tracking-widest text-white/50">
-                Signature Services
-              </p>
-              <h2 className="text-3xl font-semibold">
-                Comprehensive dentistry, elevated.
-              </h2>
-              <p className="text-sm text-white/70">
-                Preventive, restorative, cosmetic, and emergency care — all
-                designed with digital precision and luxury comfort.
-              </p>
-              <div className="grid gap-3 text-sm text-white/70">
-                {[
-                  "Digital smile design & veneers",
-                  "Invisalign & orthodontic alignment",
-                  "Implants, crowns, and full-mouth restoration",
-                  "Same-day emergency relief",
-                  "Preventive hygiene with advanced diagnostics",
-                ].map((service) => (
-                  <div
-                    key={service}
-                    className="rounded-2xl border border-white/10 bg-black/40 px-4 py-3"
-                  >
-                    {service}
-                  </div>
-                ))}
-              </div>
-              <Link
-                href="/services"
-                className="inline-flex items-center text-xs font-semibold uppercase tracking-widest text-cyan-200"
-              >
-                View all services →
-              </Link>
-            </div>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <div className="glass rounded-[32px] border border-white/10 p-8">
-              <h3 className="text-2xl font-semibold">Emergency ready</h3>
-              <p className="mt-3 text-sm text-white/70">
-                Our team holds reserved time every day for urgent care. We
-                prioritize pain relief and immediate stabilization.
-              </p>
-              <div className="mt-6 flex flex-wrap gap-3">
-                <Link
-                  href="/emergency"
-                  className="rounded-full bg-white px-5 py-2 text-xs font-semibold uppercase tracking-widest text-black"
-                >
-                  Emergency Intake
-                </Link>
-                <a
-                  href={`tel:${siteConfig.phoneRaw}`}
-                  className="rounded-full border border-white/30 px-5 py-2 text-xs font-semibold uppercase tracking-widest text-white"
-                >
-                  Call Now
-                </a>
-              </div>
-            </div>
-          </Reveal>
-        </div>
-      </section>
+      <section className="border-b border-slate-200 bg-[#fbfdff]">
+        <div className="mx-auto grid w-full max-w-6xl gap-8 px-5 py-12 md:grid-cols-[1fr_1fr] md:px-8">
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-teal-700">
+              Meet the Dentist
+            </p>
+            <h2 className="mt-3 font-display text-3xl font-semibold text-slate-900">
+              {siteConfig.founder.name}
+            </h2>
+            <p className="mt-2 text-sm font-medium text-slate-500">
+              {siteConfig.founder.title}
+            </p>
+            <p className="mt-4 text-sm leading-7 text-slate-600">
+              {siteConfig.founder.bio}
+            </p>
+            <Link
+              href="/team"
+              className="mt-5 inline-flex text-sm font-semibold text-teal-700"
+            >
+              Learn more about the team →
+            </Link>
+          </div>
 
-      <section className="px-5 pb-24 md:px-8">
-        <div className="mx-auto grid w-full max-w-6xl gap-8 md:grid-cols-[1fr_1fr]">
-          <Reveal>
-            <div className="glass rounded-[28px] border border-white/10 p-8">
-              <p className="text-xs uppercase tracking-widest text-white/50">
-                Founder
-              </p>
-              <h2 className="mt-2 text-3xl font-semibold">
-                {siteConfig.founder.name}
-              </h2>
-              <p className="mt-3 text-sm text-white/70">
-                {siteConfig.founder.bio}
-              </p>
-              <Link
-                href="/founder"
-                className="mt-6 inline-flex items-center text-xs font-semibold uppercase tracking-widest text-cyan-200"
-              >
-                Meet Dr. Argueta →
-              </Link>
-            </div>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <div className="glass rounded-[28px] border border-white/10 p-8">
-              <p className="text-xs uppercase tracking-widest text-white/50">
-                Automation & CRM
-              </p>
-              <h3 className="mt-2 text-3xl font-semibold">
-                Lead capture, simplified.
-              </h3>
-              <p className="mt-3 text-sm text-white/70">
-                Every request flows into a secure intake pipeline. Our automated
-                workflows notify your team, tag new leads, and prepare follow-up
-                tasks — ready for scaling.
-              </p>
-              <Link
-                href="/appointments"
-                className="mt-6 inline-flex items-center text-xs font-semibold uppercase tracking-widest text-cyan-200"
-              >
-                See how it works →
-              </Link>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      <section className="px-5 pb-24 md:px-8">
-        <div className="mx-auto w-full max-w-6xl">
-          <Reveal>
-            <div className="grid gap-6 md:grid-cols-[1fr_1fr]">
-              <div className="space-y-4">
-                <p className="text-xs uppercase tracking-widest text-white/50">
-                  Insurance & Payments
+          <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-br from-teal-50 via-white to-sky-50 p-6 shadow-sm">
+            <div className="absolute -right-8 top-4 h-24 w-24 rounded-full bg-orange-200/60 blur-2xl" />
+            <div className="absolute -left-8 bottom-2 h-24 w-24 rounded-full bg-teal-200/60 blur-2xl" />
+            <div className="relative flex h-full min-h-[280px] flex-col justify-between">
+              <div className="flex items-center gap-3">
+                <RioPinarLogo compact />
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                  Dr. Erick Argueta
                 </p>
-                <h2 className="text-3xl font-semibold">
-                  Transparent, flexible, and easy.
-                </h2>
-                <p className="text-sm text-white/70">
-                  We accept most PPO plans, offer clear financing options, and
-                  can verify benefits before your visit. Our concierge team
-                  walks you through every step.
-                </p>
-                <Link
-                  href="/insurance"
-                  className="inline-flex items-center text-xs font-semibold uppercase tracking-widest text-cyan-200"
-                >
-                  View insurance info →
-                </Link>
               </div>
-              <div className="grid gap-3 text-sm text-white/70">
-                {[
-                  "Insurance verification within 24 hours.",
-                  "Digital payment portals with text receipts.",
-                  "Membership plan options for uninsured patients.",
-                  "Transparent treatment plan estimates.",
-                ].map((item) => (
-                  <div
-                    key={item}
-                    className="rounded-2xl border border-white/10 bg-black/40 px-4 py-3"
-                  >
-                    {item}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      <section className="px-5 pb-24 md:px-8">
-        <div className="mx-auto w-full max-w-6xl">
-          <Reveal>
-            <FaqAI />
-          </Reveal>
-        </div>
-      </section>
-
-      <section className="px-5 pb-24 md:px-8">
-        <div className="mx-auto grid w-full max-w-6xl gap-8 md:grid-cols-[1.1fr_0.9fr]">
-          <Reveal>
-            <div className="space-y-4">
-              <p className="text-xs uppercase tracking-widest text-white/50">
-                Local & Digital Presence
+              <DoctorPortrait
+                src={siteConfig.founder.imagePath}
+                alt={siteConfig.founder.name}
+                initials={siteConfig.founder.initials}
+                priority
+                className="mx-auto h-44 w-44 border-4 border-white shadow-lg"
+              />
+              <p className="text-center text-sm text-slate-600">
+                Add the provided headshot as `public/dr-erick-argueta.jpg` to
+                replace the fallback initials automatically.
               </p>
-              <h2 className="text-3xl font-semibold">
-                Built for Central Florida SEO.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-b border-slate-200 bg-white">
+        <div className="mx-auto w-full max-w-6xl px-5 py-12 md:px-8">
+          <div className="mb-6 flex items-end justify-between gap-4">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-teal-700">
+                Services
+              </p>
+              <h2 className="mt-2 font-display text-3xl font-semibold text-slate-900">
+                Comprehensive dental services
               </h2>
-              <p className="text-sm text-white/70">
-                We optimize local listings, structured data, and review capture
-                to boost discoverability across Orlando, Kissimmee, Winter Park,
-                and beyond.
+              <p className="mt-2 max-w-3xl text-sm leading-7 text-slate-600">
+                Demo service categories modeled after stadiumfamilydentistry.com.
+                We can customize wording and final offerings for Rio Pinar
+                Dental Care.
               </p>
-              <div className="flex flex-wrap gap-3">
-                <a
-                  href={siteConfig.mapLink}
-                  className="rounded-full border border-white/20 px-5 py-2 text-xs font-semibold uppercase tracking-widest text-white"
-                >
-                  Get Directions
-                </a>
-                <a
-                  href={`tel:${siteConfig.phoneRaw}`}
-                  className="rounded-full border border-white/20 px-5 py-2 text-xs font-semibold uppercase tracking-widest text-white"
-                >
-                  Tap to Call
-                </a>
-              </div>
             </div>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <div className="glass rounded-[28px] border border-white/10 p-8">
-              <p className="text-xs uppercase tracking-widest text-white/50">
-                Google Reviews
-              </p>
-              <h3 className="mt-2 text-2xl font-semibold">
-                4.9 average rating
-              </h3>
-              <div className="mt-4 grid gap-4 text-sm text-white/70">
-                <blockquote className="rounded-2xl border border-white/10 bg-black/40 p-4">
-                  “The most modern and calming dental experience I have ever
-                  had. Everything felt intentional.”
-                </blockquote>
-                <blockquote className="rounded-2xl border border-white/10 bg-black/40 p-4">
-                  “They explained every step and the tech was impressive. I felt
-                  taken care of.”
-                </blockquote>
-              </div>
-              <Link
-                href="/reviews"
-                className="mt-6 inline-flex items-center text-xs font-semibold uppercase tracking-widest text-cyan-200"
+            <Link
+              href="/services"
+              className="hidden text-sm font-semibold text-teal-700 md:inline-flex"
+            >
+              View full services →
+            </Link>
+          </div>
+          <div className="grid gap-4 md:grid-cols-3">
+            {siteConfig.serviceCategories.map((category) => (
+              <div
+                key={category.title}
+                className="rounded-2xl border border-slate-200 bg-slate-50 p-5"
               >
-                See more reviews →
-              </Link>
-            </div>
-          </Reveal>
+                <h3 className="text-base font-semibold text-slate-900">
+                  {category.title}
+                </h3>
+                <ul className="mt-3 space-y-2 text-sm text-slate-600">
+                  {category.items.map((item) => (
+                    <li key={item} className="leading-6">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      <section className="px-5 pb-28 md:px-8">
-        <div className="mx-auto w-full max-w-6xl">
-          <Reveal>
-            <div className="glass rounded-[32px] border border-white/10 p-10 text-center">
-              <p className="text-xs uppercase tracking-widest text-white/50">
-                Emergency Dental
-              </p>
-              <h2 className="mt-3 text-3xl font-semibold">
-                Pain relief on-demand.
-              </h2>
-              <p className="mx-auto mt-3 max-w-2xl text-sm text-white/70">
-                Call us for same-day emergency appointments. We reserve time for
-                urgent care and can guide you immediately.
-              </p>
-              <div className="mt-6 flex flex-wrap justify-center gap-3">
-                <Link
-                  href="/emergency"
-                  className="rounded-full bg-white px-6 py-3 text-xs font-semibold uppercase tracking-widest text-black"
-                >
-                  Start Emergency Intake
-                </Link>
+      <section className="border-b border-slate-200 bg-[#f7fbfb]">
+        <div className="mx-auto grid w-full max-w-6xl gap-8 px-5 py-12 md:grid-cols-[1.05fr_0.95fr] md:px-8">
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-teal-700">
+              Hours & Contact
+            </p>
+            <h2 className="mt-3 font-display text-3xl font-semibold text-slate-900">
+              Visit Rio Pinar Dental Care
+            </h2>
+            <div className="mt-5 space-y-3 text-sm text-slate-600">
+              <p>{siteConfig.addressLine}</p>
+              <p>
+                Phone:{" "}
                 <a
                   href={`tel:${siteConfig.phoneRaw}`}
-                  className="rounded-full border border-white/20 px-6 py-3 text-xs font-semibold uppercase tracking-widest text-white"
+                  className="font-semibold text-teal-700"
                 >
-                  Call Now
+                  {siteConfig.phone}
                 </a>
-              </div>
+              </p>
+              <p>
+                Appointment notifications:{" "}
+                <span className="font-medium text-slate-800">
+                  {siteConfig.email}
+                </span>
+              </p>
             </div>
-          </Reveal>
+            <a
+              href={siteConfig.mapLink}
+              className="mt-5 inline-flex rounded-full border border-slate-300 px-5 py-2 text-xs font-semibold uppercase tracking-widest text-slate-700"
+            >
+              Get Directions
+            </a>
+          </div>
+
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <h3 className="text-lg font-semibold text-slate-900">Office Hours</h3>
+            <div className="mt-4 space-y-2">
+              {siteConfig.hours.map((item) => (
+                <div
+                  key={item.day}
+                  className="flex items-center justify-between gap-4 rounded-xl border border-slate-100 bg-slate-50 px-4 py-2 text-sm"
+                >
+                  <span className="font-medium text-slate-800">{item.day}</span>
+                  <span className="text-slate-600">{item.hours}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-white">
+        <div className="mx-auto grid w-full max-w-6xl gap-8 px-5 py-12 md:grid-cols-2 md:px-8">
+          <div className="rounded-3xl border border-slate-200 bg-slate-50 p-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-teal-700">
+              Insurance
+            </p>
+            <h2 className="mt-3 text-2xl font-semibold text-slate-900">
+              Popular insurance plans accepted
+            </h2>
+            <p className="mt-2 text-sm text-slate-600">
+              Demo list shown for website planning. Final accepted plans should
+              be confirmed by the office.
+            </p>
+            <div className="mt-4 grid grid-cols-2 gap-3 text-sm text-slate-700 sm:grid-cols-3">
+              {siteConfig.insurance.map((plan) => (
+                <div
+                  key={plan}
+                  className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-center"
+                >
+                  {plan}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-3xl border border-slate-200 bg-slate-50 p-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-teal-700">
+              Payments
+            </p>
+            <h2 className="mt-3 text-2xl font-semibold text-slate-900">
+              Forms of payment accepted in office
+            </h2>
+            <p className="mt-2 text-sm text-slate-600">
+              No online payment processing is enabled on this website.
+            </p>
+            <ul className="mt-4 grid gap-3 text-sm text-slate-700 sm:grid-cols-2">
+              {siteConfig.payments.map((payment) => (
+                <li
+                  key={payment}
+                  className="rounded-xl border border-slate-200 bg-white px-4 py-3"
+                >
+                  {payment}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </section>
 
       <script
         type="application/ld+json"
-        suppressHydrationWarning
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",
@@ -359,9 +357,15 @@ export default function Home() {
             name: siteConfig.name,
             address: {
               "@type": "PostalAddress",
-              addressLocality: "Central Florida",
+              streetAddress: "531 S Chickasaw Trail",
+              addressLocality: "Orlando",
+              addressRegion: "FL",
+              postalCode: "32825",
+              addressCountry: "US",
             },
             telephone: siteConfig.phone,
+            email: siteConfig.email,
+            openingHoursSpecification: openingHours,
           }),
         }}
       />

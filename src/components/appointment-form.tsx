@@ -8,6 +8,11 @@ export function AppointmentForm() {
   const [state, setState] = useState<FormState>("idle");
   const [error, setError] = useState("");
 
+  const inputClass =
+    "h-12 rounded-xl border border-slate-300 bg-white px-4 text-sm text-slate-900 placeholder:text-slate-400 focus:border-teal-600 focus:outline-none";
+  const textareaClass =
+    "min-h-[120px] rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-teal-600 focus:outline-none";
+
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setState("loading");
@@ -43,58 +48,49 @@ export function AppointmentForm() {
   return (
     <form onSubmit={handleSubmit} className="grid gap-4">
       <div className="grid gap-3 md:grid-cols-2">
-        <input
-          className="h-12 rounded-2xl border border-white/10 bg-black/40 px-4 text-sm text-white placeholder:text-white/50"
-          name="fullName"
-          placeholder="Full name"
-          required
-        />
-        <input
-          className="h-12 rounded-2xl border border-white/10 bg-black/40 px-4 text-sm text-white placeholder:text-white/50"
-          name="phone"
-          placeholder="Phone number"
-          required
-        />
+        <input className={inputClass} name="fullName" placeholder="Full name" required />
+        <input className={inputClass} name="phone" placeholder="Phone number" required />
       </div>
       <div className="grid gap-3 md:grid-cols-2">
         <input
-          className="h-12 rounded-2xl border border-white/10 bg-black/40 px-4 text-sm text-white placeholder:text-white/50"
+          className={inputClass}
           type="email"
           name="email"
           placeholder="Email address"
           required
         />
         <input
-          className="h-12 rounded-2xl border border-white/10 bg-black/40 px-4 text-sm text-white placeholder:text-white/50"
+          className={inputClass}
           name="preferredDay"
           placeholder="Preferred day/time"
           required
         />
       </div>
       <textarea
-        className="min-h-[120px] rounded-2xl border border-white/10 bg-black/40 px-4 py-3 text-sm text-white placeholder:text-white/50"
+        className={textareaClass}
         name="visitReason"
         placeholder="Reason for visit"
         required
       />
-      <label className="flex items-start gap-3 text-xs text-white/70">
+      <label className="flex items-start gap-3 text-xs text-slate-600">
         <input type="checkbox" name="consent" required className="mt-1" />
         I agree to be contacted to confirm my appointment request.
       </label>
       <button
         type="submit"
-        className="h-12 rounded-full bg-gradient-to-r from-cyan-200 via-white to-amber-200 text-xs font-semibold uppercase tracking-widest text-black transition hover:opacity-90 disabled:opacity-60"
+        className="h-12 rounded-full bg-teal-700 text-xs font-semibold uppercase tracking-widest text-white transition hover:bg-teal-800 disabled:opacity-60"
         disabled={state === "loading"}
       >
         {state === "loading" ? "Submitting..." : "Request Appointment"}
       </button>
       {state === "success" ? (
-        <p className="text-xs text-emerald-200">
-          Appointment request received. We will confirm shortly.
+        <p className="text-xs text-emerald-700">
+          Appointment request received. Our office will review it and confirm by
+          phone or email.
         </p>
       ) : null}
       {state === "error" ? (
-        <p className="text-xs text-rose-200">{error}</p>
+        <p className="text-xs text-rose-700">{error}</p>
       ) : null}
     </form>
   );

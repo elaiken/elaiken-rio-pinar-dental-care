@@ -7,16 +7,16 @@ export default function AppointmentsPage() {
     <main>
       <PageHero
         eyebrow="Appointments"
-        title="Book your visit in minutes."
-        subtitle="Submit your preferred time and we will confirm availability within 24 hours. Emergency cases are prioritized."
+        title="Request an appointment online."
+        subtitle="Send your preferred day and reason for visit. Rio Pinar Dental Care will review availability and confirm your appointment by phone or email."
       />
       <section className="px-5 pb-24 md:px-8">
         <div className="mx-auto grid w-full max-w-6xl gap-8 md:grid-cols-[1.1fr_0.9fr]">
           <div className="glass rounded-[28px] border border-white/10 p-8">
             <h2 className="text-2xl font-semibold">Request an appointment</h2>
             <p className="mt-3 text-sm text-white/70">
-              The form below feeds into the Argueta Dental CRM stub. We use it
-              to track requests, trigger follow-ups, and confirm appointments.
+              Your request is sent to the office for manual confirmation. This
+              helps the team verify availability before locking in the time.
             </p>
             <div className="mt-6">
               <AppointmentForm />
@@ -26,9 +26,9 @@ export default function AppointmentsPage() {
             <div className="glass rounded-[28px] border border-white/10 p-6">
               <h3 className="text-xl font-semibold">What happens next?</h3>
               <ul className="mt-4 space-y-2 text-sm text-white/70">
-                <li>Our concierge team reviews your request.</li>
-                <li>We verify insurance and available times.</li>
-                <li>We confirm by phone or secure message.</li>
+                <li>The office reviews your requested date/time.</li>
+                <li>Staff confirms availability and any needed details.</li>
+                <li>You receive a phone call or email confirmation.</li>
               </ul>
             </div>
             <div className="glass rounded-[28px] border border-white/10 p-6">
@@ -44,11 +44,11 @@ export default function AppointmentsPage() {
               </a>
             </div>
             <div className="glass rounded-[28px] border border-white/10 p-6">
-              <h3 className="text-xl font-semibold">Automation notes</h3>
+              <h3 className="text-xl font-semibold">Online request notes</h3>
               <p className="mt-2 text-sm text-white/70">
-                Leads submitted here post to `/api/leads`. In development, they
-                are stored in `data/lead.json` for review. In production, replace
-                that stub with your CRM or database.
+                This website does not take payments online. The form only
+                collects appointment request information so the office can
+                contact the patient and finalize scheduling.
               </p>
             </div>
           </div>

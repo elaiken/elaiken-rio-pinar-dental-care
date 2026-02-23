@@ -16,21 +16,21 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://arguetadental.com"),
+  metadataBase: new URL("https://riopinardentalcare.com"),
   title: {
-    default: `${siteConfig.name} | Central Florida Dentist`,
+    default: `${siteConfig.name} | Orlando Family Dentist`,
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
   keywords: [
-    "Central Florida dentist",
-    "luxury dental practice",
+    "Orlando dentist",
+    "family dentist Orlando",
     "cosmetic dentistry",
     "emergency dental",
-    "digital dentistry",
+    "dental cleanings",
   ],
   openGraph: {
-    title: `${siteConfig.name} | Central Florida Dentist`,
+    title: `${siteConfig.name} | Orlando Family Dentist`,
     description: siteConfig.description,
     type: "website",
   },
