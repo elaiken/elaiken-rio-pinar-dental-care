@@ -9,6 +9,14 @@ type NotificationResult =
   | { status: "skipped"; reason: string }
   | { status: "error"; reason: string };
 
+function parseRecipients(value: string | undefined, fallback: string) {
+  const raw = value ?? fallback;
+  return raw
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
 function formatField(label: string, value: unknown) {
   const parsed = typeof value === "string" ? value.trim() : "";
   return `${label}: ${parsed || "-"}`;
@@ -25,7 +33,11 @@ async function sendLeadNotification(payload: Record<string, unknown>) {
     } satisfies NotificationResult;
   }
 
-  const toAddress = process.env.LEAD_NOTIFICATION_TO || siteConfig.email;
+  const toRecipients = parseRecipients(
+    process.env.LEAD_NOTIFICATION_TO,
+    siteConfig.email
+  );
+  const ccRecipients = parseRecipients(process.env.LEAD_NOTIFICATION_CC, "");
   const fromAddress = process.env.LEAD_NOTIFICATION_FROM || gmailUser;
   const source =
     typeof payload.source === "string" && payload.source.trim()
@@ -56,7 +68,8 @@ async function sendLeadNotification(payload: Record<string, unknown>) {
   try {
     const info = await transporter.sendMail({
       from: fromAddress,
-      to: toAddress,
+      to: toRecipients,
+      cc: ccRecipients.length ? ccRecipients : undefined,
       replyTo: typeof payload.email === "string" ? payload.email : undefined,
       subject: `${siteConfig.name}: New ${source} request`,
       text,
