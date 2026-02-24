@@ -16,9 +16,9 @@ export const siteConfig = {
     title: "Lead Dentist",
     imagePath: "/dr-erick-argueta.jpeg",
     initials: "EA",
-    bio: "Dr. Erick Argueta provides patient-centered dental care with a focus on comfort, prevention, and clear treatment planning. He works closely with each patient to explain options, answer questions, and build long-term oral health with practical, modern dentistry.",
+    bio: "Originally from Silver Spring, MD, Dr. Erick Argueta was raised in Pompano Beach, FL. He realized his passion for working with his hands early in life while helping his family, who are carpenters, handymen, and painters.",
     bioExtended:
-      "At Rio Pinar Dental Care, Dr. Erick Argueta is focused on creating a welcoming experience where patients feel informed and respected. His approach combines attentive communication, thorough exams, and personalized treatment recommendations designed around each patient's needs and goals. He is committed to helping families in the Orlando community maintain healthy smiles through preventive care, restorative treatment, and dependable follow-up.",
+      "Dr. Erick attended the University of North Florida in Jacksonville, FL, for his Bachelor's degree in Health Administration. His career in dentistry began as a receptionist and accounts receivable specialist for dental offices in the Jacksonville area. He later attended the University of New England in Portland, Maine, where he graduated with his Doctorate of Dental Medicine degree with a focus in Public Health. His passion for helping underserved populations was recognized by the Health Resources and Services Administration (HRSA) when he was awarded the National Health Service Corps Scholarship. Upon graduation, Dr. Erick began his career at a rural health center in Lexington, VA, serving mostly Medicaid and Medicare patients in need of dental care. Dr. Erick aims to provide the best possible care and believes every patient is unique in nature, both personally and clinically.\n\nWhen not seeing patients, Dr. Erick enjoys spending time with family, watching sports, hiking/camping, and visiting the local beaches. Dr. Erick is currently welcoming new patients and would love to be a part of your health care team.",
   },
   hours: [
     { day: "Monday", hours: "8:30 AM - 4:00 PM" },

@@ -193,9 +193,8 @@ export default function Home() {
                 priority
                 className="mx-auto h-44 w-44 border-4 border-white shadow-lg"
               />
-              <p className="text-center text-sm text-slate-600">
-                Add the provided headshot as `public/dr-erick-argueta.jpg` to
-                replace the fallback initials automatically.
+              <p className="text-center text-sm font-semibold text-slate-700">
+                Dr. Erick Argueta
               </p>
             </div>
           </div>
