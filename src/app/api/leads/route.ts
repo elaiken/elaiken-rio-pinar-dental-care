@@ -22,11 +22,27 @@ function formatField(label: string, value: unknown) {
   return `${label}: ${parsed || "-"}`;
 }
 
-async function sendLeadNotification(payload: Record<string, unknown>) {
+function createGmailTransport() {
   const gmailUser = process.env.GMAIL_USER;
   const gmailAppPassword = process.env.GMAIL_APP_PASSWORD;
 
   if (!gmailUser || !gmailAppPassword) {
+    return null;
+  }
+
+  return nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: gmailUser,
+      pass: gmailAppPassword,
+    },
+  });
+}
+
+async function sendLeadNotification(payload: Record<string, unknown>) {
+  const transporter = createGmailTransport();
+  const gmailUser = process.env.GMAIL_USER;
+  if (!transporter || !gmailUser) {
     return {
       status: "skipped",
       reason: "GMAIL_USER or GMAIL_APP_PASSWORD not configured",
@@ -57,14 +73,6 @@ async function sendLeadNotification(payload: Record<string, unknown>) {
     formatField("Record ID", payload.id),
   ].join("\n");
 
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: gmailUser,
-      pass: gmailAppPassword,
-    },
-  });
-
   try {
     const info = await transporter.sendMail({
       from: fromAddress,
@@ -80,6 +88,83 @@ async function sendLeadNotification(payload: Record<string, unknown>) {
     return {
       status: "error",
       reason: error instanceof Error ? error.message : "Unknown Gmail SMTP error",
+    } satisfies NotificationResult;
+  }
+}
+
+async function sendPatientConfirmation(payload: Record<string, unknown>) {
+  const transporter = createGmailTransport();
+  const gmailUser = process.env.GMAIL_USER;
+  const patientEmail =
+    typeof payload.email === "string" ? payload.email.trim() : "";
+
+  if (!transporter || !gmailUser) {
+    return {
+      status: "skipped",
+      reason: "GMAIL_USER or GMAIL_APP_PASSWORD not configured",
+    } satisfies NotificationResult;
+  }
+
+  if (!patientEmail || !isValidEmail(patientEmail)) {
+    return {
+      status: "skipped",
+      reason: "No valid patient email provided",
+    } satisfies NotificationResult;
+  }
+
+  const source =
+    typeof payload.source === "string" && payload.source.trim()
+      ? payload.source
+      : "appointment request";
+  const patientName =
+    typeof payload.fullName === "string" && payload.fullName.trim()
+      ? payload.fullName.trim()
+      : "Patient";
+  const preferredDay =
+    typeof payload.preferredDay === "string" ? payload.preferredDay.trim() : "";
+
+  const fromAddress = process.env.PATIENT_CONFIRMATION_FROM || process.env.LEAD_NOTIFICATION_FROM || gmailUser;
+  const replyTo = process.env.PATIENT_CONFIRMATION_REPLY_TO || siteConfig.email;
+  const officePhone = siteConfig.phone;
+
+  const text = [
+    `Hello ${patientName},`,
+    "",
+    `Thank you for contacting ${siteConfig.name}. We received your ${source}.`,
+    "This is an automatic confirmation that your request was submitted successfully.",
+    "",
+    preferredDay ? `Requested day/time: ${preferredDay}` : "",
+    "A member of our office team will review your request and contact you by phone or email to confirm availability.",
+    "",
+    `Phone: ${officePhone}`,
+    `Office email: ${siteConfig.email}`,
+    "",
+    "Please do not reply with sensitive medical information.",
+    "",
+    `Request ID: ${typeof payload.id === "string" ? payload.id : "-"}`,
+    "",
+    `- ${siteConfig.name}`,
+  ]
+    .filter(Boolean)
+    .join("\n");
+
+  try {
+    const info = await transporter.sendMail({
+      from: fromAddress,
+      to: patientEmail,
+      replyTo,
+      subject: `${siteConfig.name}: We received your request`,
+      text,
+    });
+
+    return { status: "sent", id: info.messageId } satisfies NotificationResult;
+  } catch (error) {
+    return {
+      status: "error",
+      reason:
+        error instanceof Error
+          ? error.message
+          : "Unknown patient confirmation email error",
     } satisfies NotificationResult;
   }
 }
@@ -122,5 +207,19 @@ export async function POST(request: Request) {
     console.error("Lead email notification failed", notification.reason);
   }
 
-  return NextResponse.json({ ok: true, id: record.id, mode, notification });
+  const patientConfirmation = await sendPatientConfirmation(record);
+  if (patientConfirmation.status === "error") {
+    console.error(
+      "Patient confirmation email failed",
+      patientConfirmation.reason
+    );
+  }
+
+  return NextResponse.json({
+    ok: true,
+    id: record.id,
+    mode,
+    notification,
+    patientConfirmation,
+  });
 }
