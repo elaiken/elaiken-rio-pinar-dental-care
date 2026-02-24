@@ -22,8 +22,9 @@ export function LeadForm({
     event.preventDefault();
     setState("loading");
     setError("");
+    const form = event.currentTarget;
 
-    const formData = new FormData(event.currentTarget);
+    const formData = new FormData(form);
     const payload = Object.fromEntries(formData.entries());
 
     try {
@@ -38,7 +39,7 @@ export function LeadForm({
         throw new Error(data?.error ?? "Unable to submit.");
       }
 
-      event.currentTarget.reset();
+      form.reset();
       setState("success");
     } catch (submissionError) {
       setState("error");
