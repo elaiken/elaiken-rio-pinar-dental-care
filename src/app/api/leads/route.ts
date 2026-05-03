@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import nodemailer from "nodemailer";
 import { persistRecord } from "@/lib/lead-store";
 import { siteConfig } from "@/lib/site";
 import { isValidEmail, isValidPhone } from "@/lib/validation";
@@ -22,39 +21,53 @@ function formatField(label: string, value: unknown) {
   return `${label}: ${parsed || "-"}`;
 }
 
-function createGmailTransport() {
-  const gmailUser = process.env.GMAIL_USER;
-  const gmailAppPassword = process.env.GMAIL_APP_PASSWORD;
+async function sendResendEmail(payload: Record<string, unknown>) {
+  const apiKey = process.env.RESEND_API_KEY;
+  const fromAddress = process.env.RESEND_FROM;
 
-  if (!gmailUser || !gmailAppPassword) {
-    return null;
-  }
-
-  return nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: gmailUser,
-      pass: gmailAppPassword,
-    },
-  });
-}
-
-async function sendLeadNotification(payload: Record<string, unknown>) {
-  const transporter = createGmailTransport();
-  const gmailUser = process.env.GMAIL_USER;
-  if (!transporter || !gmailUser) {
+  if (!apiKey || !fromAddress) {
     return {
       status: "skipped",
-      reason: "GMAIL_USER or GMAIL_APP_PASSWORD not configured",
+      reason: "RESEND_API_KEY or RESEND_FROM not configured",
     } satisfies NotificationResult;
   }
 
+  try {
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+        "User-Agent": "ArguetaDental/1.0",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      return {
+        status: "error",
+        reason: errorText || `Resend API returned ${response.status}`,
+      } satisfies NotificationResult;
+    }
+
+    const data = (await response.json()) as { id?: string };
+    return { status: "sent", id: data.id } satisfies NotificationResult;
+  } catch (error) {
+    return {
+      status: "error",
+      reason: error instanceof Error ? error.message : "Unknown Resend error",
+    } satisfies NotificationResult;
+  }
+}
+
+async function sendLeadNotification(payload: Record<string, unknown>) {
   const toRecipients = parseRecipients(
     process.env.LEAD_NOTIFICATION_TO,
     siteConfig.email
   );
   const ccRecipients = parseRecipients(process.env.LEAD_NOTIFICATION_CC, "");
-  const fromAddress = process.env.LEAD_NOTIFICATION_FROM || gmailUser;
+  const fromAddress = process.env.RESEND_FROM;
   const source =
     typeof payload.source === "string" && payload.source.trim()
       ? payload.source
@@ -73,37 +86,19 @@ async function sendLeadNotification(payload: Record<string, unknown>) {
     formatField("Record ID", payload.id),
   ].join("\n");
 
-  try {
-    const info = await transporter.sendMail({
-      from: fromAddress,
-      to: toRecipients,
-      cc: ccRecipients.length ? ccRecipients : undefined,
-      replyTo: typeof payload.email === "string" ? payload.email : undefined,
-      subject: `${siteConfig.name}: New ${source} request`,
-      text,
-    });
-
-    return { status: "sent", id: info.messageId } satisfies NotificationResult;
-  } catch (error) {
-    return {
-      status: "error",
-      reason: error instanceof Error ? error.message : "Unknown Gmail SMTP error",
-    } satisfies NotificationResult;
-  }
+  return sendResendEmail({
+    from: fromAddress,
+    to: toRecipients,
+    cc: ccRecipients.length ? ccRecipients : undefined,
+    reply_to: typeof payload.email === "string" ? payload.email : undefined,
+    subject: `${siteConfig.name}: New ${source} request`,
+    text,
+  });
 }
 
 async function sendPatientConfirmation(payload: Record<string, unknown>) {
-  const transporter = createGmailTransport();
-  const gmailUser = process.env.GMAIL_USER;
   const patientEmail =
     typeof payload.email === "string" ? payload.email.trim() : "";
-
-  if (!transporter || !gmailUser) {
-    return {
-      status: "skipped",
-      reason: "GMAIL_USER or GMAIL_APP_PASSWORD not configured",
-    } satisfies NotificationResult;
-  }
 
   if (!patientEmail || !isValidEmail(patientEmail)) {
     return {
@@ -123,7 +118,7 @@ async function sendPatientConfirmation(payload: Record<string, unknown>) {
   const preferredDay =
     typeof payload.preferredDay === "string" ? payload.preferredDay.trim() : "";
 
-  const fromAddress = process.env.PATIENT_CONFIRMATION_FROM || process.env.LEAD_NOTIFICATION_FROM || gmailUser;
+  const fromAddress = process.env.PATIENT_CONFIRMATION_FROM || process.env.RESEND_FROM;
   const replyTo = process.env.PATIENT_CONFIRMATION_REPLY_TO || siteConfig.email;
   const officePhone = siteConfig.phone;
 
@@ -148,25 +143,13 @@ async function sendPatientConfirmation(payload: Record<string, unknown>) {
     .filter(Boolean)
     .join("\n");
 
-  try {
-    const info = await transporter.sendMail({
-      from: fromAddress,
-      to: patientEmail,
-      replyTo,
-      subject: `${siteConfig.name}: We received your request`,
-      text,
-    });
-
-    return { status: "sent", id: info.messageId } satisfies NotificationResult;
-  } catch (error) {
-    return {
-      status: "error",
-      reason:
-        error instanceof Error
-          ? error.message
-          : "Unknown patient confirmation email error",
-    } satisfies NotificationResult;
-  }
+  return sendResendEmail({
+    from: fromAddress,
+    to: [patientEmail],
+    reply_to: replyTo,
+    subject: `${siteConfig.name}: We received your request`,
+    text,
+  });
 }
 
 export async function POST(request: Request) {

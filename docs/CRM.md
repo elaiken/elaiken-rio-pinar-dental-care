@@ -28,13 +28,28 @@ These files are ignored by git. They help you review submissions while building.
 
 ## Production behavior
 
-In production, the API routes currently log submissions:
+In production, the API routes still log submissions for visibility:
 
-```
+```ts
 console.info("Lead capture (prod)", record)
 ```
 
-Replace this with a real CRM workflow or database write.
+The lead route also attempts to send email notifications when these environment variables are configured:
+
+- `RESEND_API_KEY`
+- `RESEND_FROM`
+- `LEAD_NOTIFICATION_TO`
+
+`LEAD_NOTIFICATION_TO` controls who receives website submissions, including appointment requests. If it is not set, the route falls back to the office email in `siteConfig`.
+
+Patient confirmation emails are also supported through:
+
+- `PATIENT_CONFIRMATION_FROM` (optional)
+- `PATIENT_CONFIRMATION_REPLY_TO` (optional)
+
+The current default notification target is `RioPinarDentalCare@gmail.com`.
+
+If you want structured storage instead of email-only delivery, replace the persistence call with a real CRM workflow or database write.
 
 ## Swap in a real CRM
 

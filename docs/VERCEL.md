@@ -10,9 +10,33 @@
 4. Add any environment variables you need (see below).
 5. Deploy.
 
-## Environment variables (optional)
+## Environment variables
 
-Add these if you connect a real CRM or AI provider later:
+Set these for the appointment request form and other lead notifications to send by email in production:
+
+- `RESEND_API_KEY`
+- `RESEND_FROM`
+- `LEAD_NOTIFICATION_TO`
+- `LEAD_NOTIFICATION_CC` (optional)
+- `PATIENT_CONFIRMATION_FROM` (optional)
+- `PATIENT_CONFIRMATION_REPLY_TO` (optional)
+
+Example:
+
+```env
+RESEND_API_KEY=re_your_resend_api_key
+RESEND_FROM="Rio Pinar Dental Care <appointments@yourdomain.com>"
+LEAD_NOTIFICATION_TO=RioPinarDentalCare@gmail.com
+LEAD_NOTIFICATION_CC=
+PATIENT_CONFIRMATION_FROM="Rio Pinar Dental Care <appointments@yourdomain.com>"
+PATIENT_CONFIRMATION_REPLY_TO=RioPinarDentalCare@gmail.com
+```
+
+`LEAD_NOTIFICATION_TO` is the main recipient list for website submissions, including the "Request an Appointment" form.
+
+`RESEND_FROM` must be a sender address/domain verified inside Resend for production delivery.
+
+These can also be added later if you connect external services:
 
 - `CRM_WEBHOOK_URL`
 - `OPENAI_API_KEY`
