@@ -11,56 +11,66 @@ export function RioPinarLogo({
   ...props
 }: LogoProps) {
   const gradientId = useId();
-  const glowId = useId();
+  const shadowId = useId();
 
   return (
     <div className={`flex items-center gap-3 ${className}`.trim()} {...props}>
       <svg aria-hidden="true" viewBox="0 0 64 64" className="h-10 w-10 shrink-0">
         <defs>
-          <linearGradient id={gradientId} x1="0.12" x2="0.88" y1="0.08" y2="0.94">
-            <stop offset="0%" stopColor="#dff8fb" />
-            <stop offset="52%" stopColor="#7dd3cf" />
+          <linearGradient id={gradientId} x1="0.15" x2="0.82" y1="0.1" y2="0.9">
+            <stop offset="0%" stopColor="#34d399" />
+            <stop offset="55%" stopColor="#14b8a6" />
             <stop offset="100%" stopColor="#0f766e" />
           </linearGradient>
           <filter
-            id={glowId}
+            id={shadowId}
             x="-20%"
             y="-20%"
             width="140%"
             height="140%"
             colorInterpolationFilters="sRGB"
           >
-            <feDropShadow dx="0" dy="4" stdDeviation="4" floodColor="#0f766e" floodOpacity="0.2" />
+            <feDropShadow
+              dx="0"
+              dy="5"
+              stdDeviation="4"
+              floodColor="#042f2e"
+              floodOpacity="0.28"
+            />
           </filter>
         </defs>
-        <circle cx="32" cy="32" r="28" fill={compact ? "rgba(255,255,255,0.12)" : `url(#${gradientId})`} />
+        <circle
+          cx="32"
+          cy="32"
+          r="28"
+          fill={compact ? "rgba(255,255,255,0.08)" : `url(#${gradientId})`}
+        />
         <circle
           cx="32"
           cy="32"
           r="27"
           fill="none"
-          stroke={compact ? "rgba(255,255,255,0.18)" : "rgba(255,255,255,0.65)"}
+          stroke={compact ? "rgba(255,255,255,0.22)" : "rgba(255,255,255,0.4)"}
         />
         <path
-          d="M46.3 23.6c-1.9-8-7.6-11.9-14.3-11.9s-12.4 3.9-14.3 11.9c-1.1 4.8-.4 9.1 1.8 12.9 2.3 4 5.4 7.3 6.2 11.3l1 5.1c.5 2.3 2.5 4 4.9 4 2.1 0 3.9-1.4 4.5-3.5l1-3.6 1 3.6c.6 2.1 2.4 3.5 4.5 3.5 2.4 0 4.4-1.7 4.9-4l1-5.1c.8-4 3.9-7.3 6.2-11.3 2.2-3.8 2.9-8.1 1.8-12.9Z"
+          d="M32 12.5c-7.7 0-13.8 4.2-15.4 12-1.1 5 .4 9.5 3.2 13 2.9 3.7 5.1 6.5 5.8 10.9l.7 4.2c.4 2.6 2.6 4.6 5.2 4.6 2.2 0 4.2-1.5 4.8-3.7l1-4.1 1 4.1c.6 2.2 2.6 3.7 4.8 3.7 2.6 0 4.8-2 5.2-4.6l.7-4.2c.7-4.4 2.9-7.2 5.8-10.9 2.8-3.5 4.3-8 3.2-13-1.6-7.8-7.7-12-15.4-12Z"
           fill="#ffffff"
-          filter={`url(#${glowId})`}
+          filter={`url(#${shadowId})`}
         />
         <path
-          d="M32 18.5c-4.8 0-8.9 2.8-10.3 7.6-1 3.5-.4 6.7 1.4 9.8 1.4 2.4 3.2 4.6 4.1 7.5l.9 3.8c.3 1.2 1.4 2.1 2.7 2.1s2.4-.8 2.7-2l1.5-5.5 1.5 5.5c.3 1.2 1.4 2 2.7 2s2.4-.9 2.7-2.1l.9-3.8c.9-2.9 2.7-5.1 4.1-7.5 1.8-3.1 2.4-6.3 1.4-9.8-1.4-4.8-5.5-7.6-10.3-7.6Z"
-          fill={compact ? "#ffffff" : "#effcfb"}
-          opacity="0.7"
+          d="M32 16.5c-5.6 0-10.1 3-11.5 8.6-1 4-.1 7.5 2.1 10.5 2.4 3.3 4.4 5.8 5 9.7l.5 2.8c.2 1.1 1.1 1.8 2.2 1.8.9 0 1.7-.6 2-1.5l1.5-5.9c.2-.8 1.4-.8 1.6 0l1.5 5.9c.3.9 1.1 1.5 2 1.5 1.1 0 2-.7 2.2-1.8l.5-2.8c.6-3.9 2.6-6.4 5-9.7 2.2-3 3.1-6.5 2.1-10.5-1.4-5.6-5.9-8.6-11.5-8.6Z"
+          fill={compact ? "#dffcf8" : "#ccfbf1"}
         />
         <path
-          d="M23.7 22.5c1.3-2.2 3.2-3.6 5.5-4.5"
+          d="M24.5 23.3c1.5-2.6 4.1-4.6 7.9-5.2"
           fill="none"
-          stroke={compact ? "rgba(255,255,255,0.88)" : "#0f766e"}
+          stroke={compact ? "rgba(255,255,255,0.95)" : "#0f766e"}
           strokeLinecap="round"
-          strokeWidth="2.1"
-          opacity="0.45"
+          strokeWidth="2.4"
+          opacity="0.5"
         />
         <path
-          d="M47.5 17.2l.8 1.9 1.9.8-1.9.8-.8 1.9-.8-1.9-1.9-.8 1.9-.8.8-1.9Z"
+          d="M47.2 16.3l1 2.4 2.4 1-2.4 1-1 2.4-1-2.4-2.4-1 2.4-1 1-2.4Z"
           fill={compact ? "#b8f3ff" : "#ffffff"}
         />
       </svg>
