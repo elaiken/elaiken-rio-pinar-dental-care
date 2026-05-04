@@ -22,6 +22,10 @@ export const metadata: Metadata = {
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
+  icons: {
+    icon: "/rio-pinar-tooth-logo.png",
+    apple: "/rio-pinar-tooth-logo.png",
+  },
   keywords: [
     "Orlando dentist",
     "family dentist Orlando",
