@@ -11,15 +11,18 @@ export function RioPinarLogo({
   ...props
 }: LogoProps) {
   return (
-    <div className={`flex items-center gap-3 ${className}`.trim()} {...props}>
+    <div
+      className={`flex items-center gap-2.5 ${className}`.trim()}
+      {...props}
+    >
       <Image
         src="/rio-pinar-tooth-logo.png"
         alt=""
         aria-hidden="true"
-        width={851}
-        height={1847}
-        className={`${compact ? "h-12 w-12" : "h-14 w-14"} shrink-0 object-contain`}
-        sizes={compact ? "48px" : "56px"}
+        width={1254}
+        height={1254}
+        className={`${compact ? "h-11 w-11" : "h-[3.8rem] w-[3.8rem]"} shrink-0 object-contain`}
+        sizes={compact ? "44px" : "61px"}
         priority
       />
       {compact ? null : (
