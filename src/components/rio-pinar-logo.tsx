@@ -19,10 +19,10 @@ export function RioPinarLogo({
         src="/rio-pinar-tooth-logo.png"
         alt=""
         aria-hidden="true"
-        width={1254}
-        height={1254}
-        className={`${compact ? "h-11 w-11" : "h-[3.8rem] w-[3.8rem]"} shrink-0 object-contain`}
-        sizes={compact ? "44px" : "61px"}
+        width={732}
+        height={1009}
+        className={`${compact ? "h-10 w-auto" : "h-[3.4rem] w-auto"} shrink-0 object-contain`}
+        sizes={compact ? "40px" : "54px"}
         priority
       />
       {compact ? null : (
